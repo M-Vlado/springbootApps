@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Webshop</title>
+
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" th:href="@{/normalize.css}">
+
+</head>
+<body>
+<header class="container">
+    <div class="group menu">
+        <ul>
+            <li class="web-link"><a th:href="@{/webshop}">Web Shop</a></li>
+            <li class="more-link"><a th:href="@{/webshop/more-filters}">More >></a></li>
+        </ul>
+    </div>
+    <nav class="navigation">
+        <th:block th:if="${#strings.startsWith(#httpServletRequest.requestURI, '/webshop/more-filters')}" th:insert="fragments :: display-more_filters"></th:block>
+        <th:block th:unless="${#strings.startsWith(#httpServletRequest.requestURI, '/webshop/more-filters')}" th:insert="fragments :: display-basic_filters"></th:block>
+
+    </nav>
+    <div class="search-field group">
+        <th:block th:unless="${#strings.startsWith(#httpServletRequest.requestURI, '/webshop/more-filters')}" th:insert="fragments :: display-search"></th:block>
+
+        <th:block th:if="${#strings.startsWith(#httpServletRequest.requestURI, '/webshop/more-filters')}" th:insert="fragments :: display-filter_by_price"></th:block>
+    </div>
+</header>
+
+
+
+<main class="container">
+    <div th:switch="${#httpServletRequest.requestURI}">
+        <th:block th:case="'/webshop/average-stock'" th:insert="fragments :: display-average"></th:block>
+        <th:block th:case="'/webshop/most-expensive'" th:insert="fragments :: display-most_expensive"></th:block>
+        <th:block th:case="*" th:insert="fragments :: display-table"></th:block>
+    </div>
+</main>
+
+
+</body>
+</html>

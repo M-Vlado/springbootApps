@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="display-table">
+    <table>
+        <thead>
+        <th class="table">Name</th>
+        <th class="table">Type</th>
+        <th class="table">Description</th>
+        <th class="table">Price</th>
+        <th class="table">Quantity of stock</th>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td class="table_row" th:text="${item.getName()}"></td>
+            <td class="table_row" th:text="${item.getType()}"></td>
+            <td class="table_row" th:text="${item.getDescription()}"></td>
+            <td class="table_row" th:text="${#numbers.formatDecimal(item.getPrice(),1,2)} + (${currency} ?:' €')"></td>
+            <td class="table_row" th:text="${item.getQuantityOfStock()}"></td>
+        </tr>
+        <tr th:if="(${items.size()} == 0)">
+            <td class="table_row">-----</td>
+            <td class="table_row">List of product is empty!</td>
+            <td class="table_row">-----</td>
+            <td class="table_row">-----</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="display-average">
+    <h2 th:text="'Average stock: ' + ${averageStock}"></h2>
+</div>
+
+<div th:fragment="display-most_expensive">
+    <h2 th:text="'Most expensive is: ' + ${mostExpensive}"></h2>
+</div>
+
+<div th:fragment="display-basic_filters">
+    <ul>
+        <li><a th:href="@{/webshop/only-available}">ONLY AVAILABLE</a></li>
+        <li><a th:href="@{/webshop/cheapest-first}">CHEAPEST FIRST</a></li>
+        <li><a th:href="@{/webshop/contains-nike}">CONTAINS NIKE</a></li>
+        <li><a th:href="@{/webshop/average-stock}">AVERAGE STOCK</a></li>
+        <li><a th:href="@{/webshop/most-expensive}">MOST EXPENSIVE AVAILABLE</a></li>
+    </ul>
+</div>
+
+<div th:fragment="display-more_filters">
+    <ul>
+        <li><a th:href="@{/webshop/more-filters/filter-by-type/{type}(type = 'clothes-and-shoes')}">CLOTHES AND SHOES</a></li>
+        <li><a th:href="@{/webshop/more-filters/filter-by-type/{type}(type = 'electronic')}">ELECTRONICS</a></li>
+        <li><a th:href="@{/webshop/more-filters/filter-by-type/{type}(type = 'beverages-and-snacks')}">BEVERAGES AND SNACKS</a></li>
+        <li><a th:href="@{/webshop/more-filters/euro}">EURO</a></li>
+        <li><a th:href="@{/webshop/more-filters/czech-crown}">CZECH CROWN</a></li>
+    </ul>
+</div>
+
+<div th:fragment="display-search">
+    <form action="" th:action="@{/webshop/search}" method="post">
+        <div class="by-price">
+            <label>Search for:</label>
+            <input class="inputs" th:type="text" th:name="product" placeholder="...something like nike" required minlength="3">
+        </div>
+        <input class="btn" th:type="submit" th:value="Search">
+
+    </form>
+</div>
+
+<div th:fragment="display-filter_by_price">
+    <form action="" th:action="@{/webshop/more-filters/filter-by-price}" method="post">
+        <div class="by-price">
+            <input class="btn" th:type="submit" th:value="Above" th:name="above" >
+            <input class="btn" th:type="submit" th:value="Below" th:name="below">
+            <input class="btn" th:type="submit" th:value="Exactly" th:name="exactly">
+
+        </div>
+        <div class="by-price">
+            <label th:for="price">Filter by price:</label>
+            <input class="inputs" th:type="number" th:name="price" placeholder="...e.g.: 300" min="0" step="0.01" required>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
